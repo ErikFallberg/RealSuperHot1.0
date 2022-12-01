@@ -7,34 +7,70 @@ namespace RealSuperHot1._0
     class World
     {
         Tile[] map;
-        Actor player;
+        int size = 20;
 
-        public World (Tile[] map, Actor player)
+        Actor player; //?
+        Actor[] allActors;  // temp
+        // Item[] items;
+        // Attack[] attacks; could maybe be attacks. 
+        // Actor allcharacters;
+
+
+
+        public World (Tile[] map, Actor[] allActors)
         {
             this.map = map;
-            this.player = player;
-
+            this.allActors = allActors;
         }
 
 
+        public bool CheckCollision(Coordinate coord) // ACTIONCOMPONENT?
+        {
+            foreach (Tile tile in map)
+            {
+                if (coord.Compare(tile.Coord))
+                    if (tile is Walltile)
+                        return true;
+            }
+            foreach (Actor actor in allActors)
+            {
+                if (coord.Compare(actor.ActorCoordinate))
+                    return true;    
+            }
+            return false;
+        }
+           
+        
 
-        public void ShowMap()
+        public void ShowMap(Item attack)
         {
             int index = 0;
-            for (int i = 0; i < Math.Sqrt(map.Length); i++)
+            for (int i = 0; i < size; i++)
             {
-                for (int j = 0; j < Math.Sqrt(map.Length); j++)
+                for (int j = 0; j < size; j++)
                 {
-                    if (!map[index].Coord.Compare(player.ActorCoordinate))
+                    bool check = true;
+                    if (attack != null && map[index].Coord.Compare(attack.Coord))
+                    {
+                        Console.Write(attack.Id);
+                        index++;
+                        check = false;
+                    }
+                    if (check)
+                    foreach (Actor actor in allActors)
+                        if (map[index].Coord.Compare(actor.ActorCoordinate))
+                        {
+                            Console.Write(actor.Id);
+                            index++;
+                            check = false;
+                        }
+                    
+                    if (check)
                     {
                         Console.Write(map[index].Id);
                         index++;
                     }
-                    else
-                    {
-                        Console.Write(player.Id);
-                        index++;
-                    }
+
                 }
                 Console.WriteLine();
             }

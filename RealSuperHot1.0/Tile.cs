@@ -15,5 +15,7 @@ namespace RealSuperHot1._0
         {
             this.Coord = coord;
         }
+
+        
     }
 }

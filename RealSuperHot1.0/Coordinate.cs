@@ -17,6 +17,12 @@ namespace RealSuperHot1._0
         public Coordinate(Coordinate other)
             => CopyFrom(other);
 
+        public Coordinate(Coordinate other, Direction direction) : this(other)
+            => IncrementCoordinate(direction);
+            
+        
+
+
         public void CopyFrom(Coordinate other)
         {
             this.x = other.x;
