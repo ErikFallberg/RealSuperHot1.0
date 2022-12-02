@@ -30,18 +30,21 @@ namespace RealSuperHot1._0
         }
 
 
-        public Item Attack() // Attack cant return item cause it fucks with showmap // CONTINUE HERE. Instead i think it should change the tile, and after tile is shown it changes back. 
-        {
-            Coordinate coord = new Coordinate(ActorCoordinate, direction);
-            if (direction == Direction.Left || direction == Direction.Right)
-                return new Item(coord, '-');
-            else if (direction == Direction.Up || direction == Direction.Down)
-                return new Item(coord, '|');
-            else
-                throw new Exception("Attack took an invalid Direction.");
-        }
+        //public Item Attack() // Attack cant return item cause it fucks with showmap // CONTINUE HERE. Instead i think it should change the tile, and after tile is shown it changes back. 
+        //{
+        //    Coordinate coord = new Coordinate(ActorCoordinate, direction);
+        //    if (direction == Direction.Left || direction == Direction.Right)
+        //        return new Item(coord, '-');
+        //    else if (direction == Direction.Up || direction == Direction.Down)
+        //        return new Item(coord, '|');
+        //    else
+        //        throw new Exception("Attack took an invalid Direction.");
+        //}
             
-
+         public void Attack(World world)
+         {
+              
+         }
 
         
         

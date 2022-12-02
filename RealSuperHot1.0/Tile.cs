@@ -16,6 +16,18 @@ namespace RealSuperHot1._0
             this.Coord = coord;
         }
 
+        abstract public void Attacked(char id); // Bool attacked? 
+        
+        public char showId()
+        {
+            // if (!attacked)
+            //    return id;
+            // else
+            //    return id;
+            //    set id;
+            //    attack = !attacked; 
+            return null;
+        }
         
     }
 }

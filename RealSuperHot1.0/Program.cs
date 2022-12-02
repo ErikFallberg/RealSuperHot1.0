@@ -18,36 +18,40 @@ namespace RealSuperHot1._0
 
         static int size = 20;
         static int startingpos = size / 2;
+        static Tile[] map = CreateMap(size);
 
         static Coordinate playercoord = new Coordinate(startingpos, startingpos);
         static Coordinate monstercoord = new Coordinate(startingpos / 2, startingpos / 2);
-        static Actor player = new Actor(new PlayerComponent(), playercoord, 20, '@');
+        static int playerhp = 20;
+        static char playersprite = '@';
+
+        static Actor player = new Actor(new PlayerComponent(), playercoord, playerhp, playersprite);
         static Actor monster = new Actor(new MonsterComponent(), monstercoord, 1, 'X');
 
         static Actor[] allActors = new Actor[] { player, monster };
 
-        static Tile[] map = CreateMap(size);
+
 
         static World world = new World(map, allActors);
 
-        static Item attack = null;
+
 
         static void Main()
         {
             
            while (true)
             {
-                //world.ShowMap(attack);
-                //foreach (Actor actor in allActors)
-                //{
-                //    if (!TakeInput(out ConsoleKey input))
-                //        Console.WriteLine("Wrong input, nothing happened");
-                //    else if (input != ConsoleKey.Spacebar)
-                //        Move(actor, input);
-                //    else
-                //        Console.WriteLine("ATTACK");  
-                //}
-                //attack = player.Attack();
+                world.ShowMap();
+                foreach (Actor actor in allActors)
+                {
+                    if (!TakeInput(out ConsoleKey input))
+                        Console.WriteLine("Wrong input, nothing happened");
+                    else if (input != ConsoleKey.Spacebar)
+                        Move(actor, input);
+                    else
+                        Console.WriteLine("ATTACK");
+                }
+
 
             }
 

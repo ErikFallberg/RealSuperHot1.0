@@ -12,9 +12,6 @@ namespace RealSuperHot1._0
             base.Passable = true;
         }
 
-        public void Attack(char id)
-        {
-            this.Id = id;
-        }
+        
     }
 }
