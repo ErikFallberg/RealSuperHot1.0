@@ -11,7 +11,7 @@ namespace RealSuperHot1._0
         IActionComponent action;
 
         public Coordinate ActorCoordinate { get; private set; }
-        public Coordinate potentialMove;
+        public Coordinate tempCoordinate;
 
         Direction direction = Direction.Up;
         int hp; 
@@ -26,7 +26,7 @@ namespace RealSuperHot1._0
             this.hp = hp;
             this.Id = id;
             this.ActorCoordinate = coord;
-            potentialMove = new Coordinate(ActorCoordinate);
+            tempCoordinate = new Coordinate(ActorCoordinate);
         }
 
 
@@ -41,37 +41,45 @@ namespace RealSuperHot1._0
         //        throw new Exception("Attack took an invalid Direction.");
         //}
             
-         public void Attack(World world)
+         public void Attack(Tile[] map)
          {
               
          }
 
-        
-        
 
 
-        public bool GetMove(Direction direction, out Coordinate output)
+        public bool TakeInput(out Direction direction)
+             => action.TakeInput(out direction);
+        
+        public bool CheckDirection(Direction direction)
         {
-            if (this.direction != direction)
+            if (direction == Direction.Up || direction == Direction.Down || direction == Direction.Left || direction == Direction.Right)
             {
-                this.direction = direction;
-                output = ActorCoordinate;
-                return false;
-            }
-            else
-            {
-                potentialMove.IncrementCoordinate(direction);
-                output = potentialMove;
+                if (this.direction != direction) 
+                {
+                    this.direction = direction;
+                    return false;
+                }
+
                 return true;
             }
-            
-
-
+            return false;
         }
-        public void Move()
-            =>  ActorCoordinate.CopyFrom(potentialMove);
-        public void UnMove()
-            => potentialMove.CopyFrom(ActorCoordinate);
+
+        public Coordinate GetCoordinate()
+        {
+            tempCoordinate.IncrementCoordinate(direction);
+            return tempCoordinate;
+        }
+
+        public void Move(bool check)
+        {
+            if (!check)
+                ActorCoordinate.CopyFrom(tempCoordinate);
+            else
+                tempCoordinate.CopyFrom(ActorCoordinate);
+        }
+             
         
             
         

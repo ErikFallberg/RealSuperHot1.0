@@ -9,7 +9,7 @@ namespace RealSuperHot1._0
         Tile[] map;
         int size = 20;
 
-        Actor player; //?
+        //?
         Actor[] allActors;  // temp
         // Item[] items;
         // Attack[] attacks; could maybe be attacks. 
@@ -63,6 +63,7 @@ namespace RealSuperHot1._0
                             Console.Write(actor.Id);
                             index++;
                             check = false;
+                            break;
                         }
                     
                     if (check)

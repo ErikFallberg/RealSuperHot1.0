@@ -26,7 +26,7 @@ namespace RealSuperHot1._0
         static char playersprite = '@';
 
         static Actor player = new Actor(new PlayerComponent(), playercoord, playerhp, playersprite);
-        static Actor monster = new Actor(new MonsterComponent(), monstercoord, 1, 'X');
+        static Actor monster = new Actor(new MonsterComponent(playercoord, monstercoord), monstercoord, 1, 'X');
 
         static Actor[] allActors = new Actor[] { player, monster };
 
@@ -38,21 +38,24 @@ namespace RealSuperHot1._0
 
         static void Main()
         {
-            
-           while (true)
+
+            while (true)
             {
+                Console.WriteLine("");
                 world.ShowMap();
+
                 foreach (Actor actor in allActors)
                 {
-                    if (!TakeInput(out ConsoleKey input))
-                        Console.WriteLine("Wrong input, nothing happened");
-                    else if (input != ConsoleKey.Spacebar)
-                        Move(actor, input);
+                    if(actor.TakeInput(out Direction direction))
+                        Console.WriteLine(); // Attack
                     else
-                        Console.WriteLine("ATTACK");
+                    {
+                        if (!actor.CheckDirection(direction))
+                            continue;
+                        actor.Move(world.CheckCollision(actor.GetCoordinate()));
+                    }
                 }
-
-
+                Console.Clear();
             }
 
         }
@@ -61,23 +64,6 @@ namespace RealSuperHot1._0
         static public void Attack(Actor actor)
         {
 
-        }
-
-        static public void Move(Actor actor, ConsoleKey input)
-        {
-
-
-            if (!actor.GetMove((Direction)input, out Coordinate coord))
-                Console.WriteLine("You just changed direction");
-            else if (world.CheckCollision(coord))
-            {
-                Console.WriteLine("You can't walk there");
-                actor.UnMove();
-            }
-            else
-                actor.Move();
-                    
-            
         }
 
         static bool TakeInput(out ConsoleKey input)  // ACTIONCOMPONENT. Om spacebar ska spelaren attackera, om spelaren står bredvid ska monster attackera. 

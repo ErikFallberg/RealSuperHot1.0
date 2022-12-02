@@ -49,8 +49,15 @@ namespace RealSuperHot1._0
                     x++;
                     break;
                 default:
-                    throw new Exception("Increment Coordinate got an invalid direction");
+                    // all inputs that arent valid dont do anyttihng. 
+                    break;
             }
         }
+
+        public int DifferenceX(Coordinate other)
+            => other.x - this.x;
+
+        public int DifferenceY(Coordinate other)
+            => other.y - this.y;
     }
 }

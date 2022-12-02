@@ -6,5 +6,6 @@ namespace RealSuperHot1._0
 {
     interface IActionComponent
     {
+        public bool TakeInput(out Direction direction);
     }
 }
