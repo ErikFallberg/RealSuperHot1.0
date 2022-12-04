@@ -11,14 +11,5 @@ namespace RealSuperHot1._0
             this.Id = id;
         }
 
-        public override void Attacked(Direction direction)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void ResetId()
-        {
-            throw new NotImplementedException();
-        }
     }
 }

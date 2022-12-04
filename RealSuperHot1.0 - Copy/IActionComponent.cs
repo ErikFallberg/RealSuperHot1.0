@@ -1,0 +1,11 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace RealSuperHot1._0
+{
+    interface IActionComponent
+    {
+        public bool TakeInput(out Direction direction);
+    }
+}

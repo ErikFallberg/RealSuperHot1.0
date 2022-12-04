@@ -3,10 +3,9 @@
 namespace RealSuperHot1._0
 {
         //  Improvements :
-        //  Välja hp, eller difficulty. 
-        //  Välja karaktärsbild. 
-        //  Potentiell förbättring, inte resetta alla tiles. 
-        // tilesförändring tar in ett ID? 
+        //  Välja hp, eller difficulty.
+        //  Välja karaktärsbild.
+        //  
     enum Direction
     {
         Left = ConsoleKey.A,
@@ -47,10 +46,14 @@ namespace RealSuperHot1._0
 
                 foreach (Actor actor in allActors)
                 {
-                    if (actor.TakeInput(out Direction direction))
-                        Attack(actor);
+                    if(actor.TakeInput(out Direction direction))
+                        Console.WriteLine(); // Attack
                     else
-                        Move(actor, direction);
+                    {
+                        if (!actor.CheckDirection(direction))
+                            continue;
+                        actor.Move(world.CheckCollision(actor.GetCoordinate()));
+                    }
                 }
                 Console.Clear();
             }
@@ -60,28 +63,7 @@ namespace RealSuperHot1._0
 
         static public void Attack(Actor actor)
         {
-            Coordinate temp = actor.GetCoordinate();
 
-            if (world.CheckHit(temp, out Actor target))
-                target.Hp--;
-            actor.MakeAttack(world.FindTile(temp));
-            actor.CancelMove();
-            // if (target.Hp == 0) --  
-        }
-
-
-        static public void Move(Actor actor, Direction direction)
-        {
-            if (!actor.CheckDirection(direction))
-                return;
-            else
-            {
-                Coordinate temp = actor.GetCoordinate();
-                if (world.WallCollision(temp) || world.ActorCollision(temp))
-                    actor.CancelMove();
-                else
-                    actor.PerformMove();
-            }
         }
 
         static bool TakeInput(out ConsoleKey input)  // ACTIONCOMPONENT. Om spacebar ska spelaren attackera, om spelaren står bredvid ska monster attackera. 

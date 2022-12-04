@@ -9,7 +9,7 @@ namespace RealSuperHot1._0
         Tile[] map;
         int size = 20;
 
-        // ?
+        //?
         Actor[] allActors;  // temp
         // Item[] items;
         // Attack[] attacks; could maybe be attacks. 
@@ -24,7 +24,7 @@ namespace RealSuperHot1._0
         }
 
 
-        public bool WallCollision(Coordinate coord) // ACTIONCOMPONENT?
+        public bool CheckCollision(Coordinate coord) // ACTIONCOMPONENT?
         {
             foreach (Tile tile in map)
             {
@@ -32,42 +32,15 @@ namespace RealSuperHot1._0
                     if (tile is Walltile)
                         return true;
             }
-            return false;
-        }
-
-        public Tile FindTile(Coordinate coord)
-        {
-            foreach (Tile tile in map)
-            {
-                if (coord.Compare(tile.Coord))
-                    return tile;
-            }
-            throw new Exception("FindTile got a bad Coordinate!!!");
-        }
-
-        public bool ActorCollision(Coordinate coord) // ACTIONCOMPONENT?
-        {
             foreach (Actor actor in allActors)
             {
                 if (coord.Compare(actor.ActorCoordinate))
-                    return true;
+                    return true;    
             }
             return false;
         }
-
-        public bool CheckHit(Coordinate coord, out Actor target) // ACTIONCOMPONENT?
-        {
-            foreach (Actor actor in allActors)
-            {
-                if (coord.Compare(actor.ActorCoordinate))
-                {
-                    target = actor;
-                    return true;
-                }
-            }
-            target = null;
-            return false;
-        }
+           
+        
 
         public void ShowMap()
         {
@@ -88,6 +61,7 @@ namespace RealSuperHot1._0
                         if (map[index].Coord.Compare(actor.ActorCoordinate))
                         {
                             Console.Write(actor.Id);
+                            index++;
                             check = false;
                             break;
                         }
@@ -95,9 +69,9 @@ namespace RealSuperHot1._0
                     if (check)
                     {
                         Console.Write(map[index].Id);
+                        index++;
                     }
-                    map[index].ResetId();
-                    index++;
+
                 }
                 Console.WriteLine();
             }

@@ -12,6 +12,21 @@ namespace RealSuperHot1._0
             base.Passable = true;
         }
 
-        
+        public override void Attacked(Direction direction)
+        {
+            if (direction == Direction.Right || direction == Direction.Left)
+            {
+                Id = '-';
+            }
+            else
+            {
+                Id = '|';
+            }
+        }
+
+        public override void ResetId()
+        {
+            Id = '.';
+        }
     }
 }

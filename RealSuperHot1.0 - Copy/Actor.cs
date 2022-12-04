@@ -14,7 +14,7 @@ namespace RealSuperHot1._0
         public Coordinate tempCoordinate;
 
         Direction direction = Direction.Up;
-        public int Hp { get; set; } 
+        int hp; 
 
 
 
@@ -23,7 +23,7 @@ namespace RealSuperHot1._0
         public Actor(IActionComponent action, Coordinate coord, int hp, char id)
         {
             this.action = action;
-            this.Hp = hp;
+            this.hp = hp;
             this.Id = id;
             this.ActorCoordinate = coord;
             tempCoordinate = new Coordinate(ActorCoordinate);
@@ -41,10 +41,13 @@ namespace RealSuperHot1._0
         //        throw new Exception("Attack took an invalid Direction.");
         //}
             
-         public void MakeAttack(Tile tile)
-            => tile.Attacked(direction);
-        
-         
+         public void Attack(Tile[] map)
+         {
+              
+         }
+
+
+
         public bool TakeInput(out Direction direction)
              => action.TakeInput(out direction);
         
@@ -69,16 +72,15 @@ namespace RealSuperHot1._0
             return tempCoordinate;
         }
 
-        public void PerformMove()
+        public void Move(bool check)
         {
-             ActorCoordinate.CopyFrom(tempCoordinate);
+            if (!check)
+                ActorCoordinate.CopyFrom(tempCoordinate);
+            else
+                tempCoordinate.CopyFrom(ActorCoordinate);
         }
              
-        public void CancelMove()
-        {
-            tempCoordinate.CopyFrom(ActorCoordinate);
-        }
-        // tempCoordinate return; 
+        
             
         
 
