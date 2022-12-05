@@ -8,19 +8,19 @@ namespace RealSuperHot1._0
     {
         Tile[] map;
         int size = 20;
-
-        // ?
-        Actor[] allActors;  // temp
+        Actor player;
+        List<Actor> allActors;  // temp
         // Item[] items;
         // Attack[] attacks; could maybe be attacks. 
         // Actor allcharacters;
 
 
 
-        public World (Tile[] map, Actor[] allActors)
+        public World (Tile[] map, List<Actor> allActors)
         {
             this.map = map;
             this.allActors = allActors;
+            player = allActors[0];
         }
 
 
@@ -50,12 +50,16 @@ namespace RealSuperHot1._0
             foreach (Actor actor in allActors)
             {
                 if (coord.Compare(actor.ActorCoordinate))
+                {
+                    if (actor == player)
+                        actor.Hp--;
                     return true;
+                }
             }
             return false;
         }
 
-        public bool CheckHit(Coordinate coord, out Actor target) // ACTIONCOMPONENT?
+        public bool ActorCollision(Coordinate coord, out Actor target) // ACTIONCOMPONENT?
         {
             foreach (Actor actor in allActors)
             {

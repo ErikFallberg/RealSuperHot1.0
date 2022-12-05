@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace RealSuperHot1._0
 {
@@ -7,6 +8,9 @@ namespace RealSuperHot1._0
         //  Välja karaktärsbild. 
         //  Potentiell förbättring, inte resetta alla tiles. 
         // tilesförändring tar in ett ID? 
+        // World 
+        // Krav : Throw and catch; 
+        // Enable nullable, och nullhantering // findtile gets a try-catch. 
     enum Direction
     {
         Left = ConsoleKey.A,
@@ -16,45 +20,58 @@ namespace RealSuperHot1._0
     }
     class Program
     {
-
+        static int score;
         static int size = 20;
         static int startingpos = size / 2;
+
         static Tile[] map = CreateMap(size);
 
-        static Coordinate playercoord = new Coordinate(startingpos, startingpos);
-        static Coordinate monstercoord = new Coordinate(startingpos / 2, startingpos / 2);
         static int playerhp = 20;
         static char playersprite = '@';
 
-        static Actor player = new Actor(new PlayerComponent(), playercoord, playerhp, playersprite);
-        static Actor monster = new Actor(new MonsterComponent(playercoord, monstercoord), monstercoord, 1, 'X');
+        static Actor player;
 
-        static Actor[] allActors = new Actor[] { player, monster };
+        static List<Actor> allActors;
 
+        static World world;
 
-
-        static World world = new World(map, allActors);
 
 
 
         static void Main()
         {
+            player = new Actor(new PlayerComponent(), new Coordinate(startingpos, startingpos), playerhp, playersprite);
+            allActors = new List<Actor> { player };
+            world = new World(map, allActors);
+
+            int timer = 0;
+            int level = 0;
+            score = 0;
 
             while (true)
             {
-                Console.WriteLine("");
+                Console.WriteLine($"Hp: {player.Hp} Level: {level} Score: {score}");
                 world.ShowMap();
 
                 foreach (Actor actor in allActors)
                 {
                     if (actor.TakeInput(out Direction direction))
                         Attack(actor);
-                    else
+                    else if(actor.Hp > 0)
                         Move(actor, direction);
                 }
+                if (player.Hp < 1)
+                    break;
+                allActors.RemoveAll((Actor actor) => actor.Hp < 1);
                 Console.Clear();
-            }
+                Spawner(level);
 
+                timer++;
+                level += (timer % 50 == 0 && level < 10) ? 1 : 0;
+            }
+            Console.Clear();
+            Console.WriteLine("Game Over!!!");
+            Console.WriteLine($"Your final score was {score}");
         }
         
 
@@ -62,11 +79,13 @@ namespace RealSuperHot1._0
         {
             Coordinate temp = actor.GetCoordinate();
 
-            if (world.CheckHit(temp, out Actor target))
+            if (world.ActorCollision(temp, out Actor target))
+            {
                 target.Hp--;
+                score++;
+            }
             actor.MakeAttack(world.FindTile(temp));
-            actor.CancelMove();
-            // if (target.Hp == 0) --  
+            actor.CancelMove(); 
         }
 
 
@@ -84,10 +103,52 @@ namespace RealSuperHot1._0
             }
         }
 
-        static bool TakeInput(out ConsoleKey input)  // ACTIONCOMPONENT. Om spacebar ska spelaren attackera, om spelaren står bredvid ska monster attackera. 
+        public static void Spawner(int level)
         {
-            input = Console.ReadKey().Key;
-            return input == ConsoleKey.A || input == ConsoleKey.D || input == ConsoleKey.W || input == ConsoleKey.S || input == ConsoleKey.Spacebar;
+            Random rand = new Random();
+            int r = rand.Next(0, 10 - level);
+            if (r == 0 && allActors.Count < 20)
+                SpawnMonster();
+        }
+
+        public static void SpawnMonster()
+        {
+            Coordinate monstercoord = SpawnLocation();
+            MonsterComponent monstercomp = new MonsterComponent(monstercoord, player.ActorCoordinate);
+            char id = 'X';
+            int hp = 1;
+
+            allActors.Add(new Actor(monstercomp, monstercoord, hp, id));
+        }
+
+        public static Coordinate SpawnLocation()
+        {
+            int x = 0;
+            int y = 0;
+            Random rand = new Random();
+            int r = rand.Next(0, 4);
+            switch (r)
+            {
+                case 0:
+                    x = 1;
+                    y = rand.Next(1, size - 1);
+                    break;
+                case 1:
+                    x = size - 1;
+                    y = rand.Next(1, size - 1);
+                    break;
+                case 2:
+                    x = rand.Next(1, size - 1);
+                    y = 1;
+                    break;
+                case 3:
+                    x = rand.Next(1, size - 1);
+                    y = size - 1;
+                    break;
+                default:
+                    throw new Exception("spawnlocation is fucking ur");
+            }
+            return new Coordinate(x, y);
         }
 
 

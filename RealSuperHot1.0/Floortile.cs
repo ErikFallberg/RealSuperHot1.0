@@ -8,8 +8,8 @@ namespace RealSuperHot1._0
     {
         public Floortile(Coordinate coord) : base(coord)
         {
-            base.Id = '.';
-            base.Passable = true;
+            defaultId = '.';
+            base.Id = defaultId;
         }
 
         public override void Attacked(Direction direction)
@@ -22,11 +22,6 @@ namespace RealSuperHot1._0
             {
                 Id = '|';
             }
-        }
-
-        public override void ResetId()
-        {
-            Id = '.';
         }
     }
 }
