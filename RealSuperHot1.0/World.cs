@@ -9,12 +9,7 @@ namespace RealSuperHot1._0
         Tile[] map;
         int size = 20;
         Actor player;
-        List<Actor> allActors;  // temp
-        // Item[] items;
-        // Attack[] attacks; could maybe be attacks. 
-        // Actor allcharacters;
-
-
+        List<Actor> allActors;  
 
         public World (Tile[] map, List<Actor> allActors)
         {
@@ -24,15 +19,19 @@ namespace RealSuperHot1._0
         }
 
 
-        public bool WallCollision(Coordinate coord) // ACTIONCOMPONENT?
+        public bool WallCollision(Coordinate coord)
         {
-            foreach (Tile tile in map)
+            try
             {
-                if (coord.Compare(tile.Coord))
-                    if (tile is Walltile)
-                        return true;
+                if (FindTile(coord) is Walltile)
+                    return true;
+                else
+                    return false;
             }
-            return false;
+            catch
+            {
+                return true;
+            }
         }
 
         public Tile FindTile(Coordinate coord)
@@ -45,7 +44,7 @@ namespace RealSuperHot1._0
             throw new Exception("FindTile got a bad Coordinate!!!");
         }
 
-        public bool ActorCollision(Coordinate coord) // ACTIONCOMPONENT?
+        public bool ActorCollision(Coordinate coord)
         {
             foreach (Actor actor in allActors)
             {
@@ -59,7 +58,7 @@ namespace RealSuperHot1._0
             return false;
         }
 
-        public bool ActorCollision(Coordinate coord, out Actor target) // ACTIONCOMPONENT?
+        public bool ActorCollision(Coordinate coord, out Actor target) 
         {
             foreach (Actor actor in allActors)
             {
@@ -81,13 +80,6 @@ namespace RealSuperHot1._0
                 for (int j = 0; j < size; j++)
                 {
                     bool check = true;
-                    //if (attack != null && map[index].Coord.Compare(attack.Coord))
-                    //{
-                    //    Console.Write(attack.Id);
-                    //    index++;
-                    //    check = false;
-                    //}
-                    if (check)
                     foreach (Actor actor in allActors)
                         if (map[index].Coord.Compare(actor.ActorCoordinate))
                         {

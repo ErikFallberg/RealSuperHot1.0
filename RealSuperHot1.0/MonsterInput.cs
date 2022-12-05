@@ -4,12 +4,12 @@ using System.Text;
 
 namespace RealSuperHot1._0
 {
-    class MonsterComponent : IActionComponent 
+    class MonsterInput : IInputComponent 
     {
         Coordinate self;
         Coordinate player;
 
-        public MonsterComponent(Coordinate self, Coordinate player)
+        public MonsterInput(Coordinate self, Coordinate player)
         {
             this.self = self;
             this.player = player;
@@ -38,10 +38,7 @@ namespace RealSuperHot1._0
             else
                 direction = Direction.Left;           
 
-
             return false;
-
-
         }
     }
 }

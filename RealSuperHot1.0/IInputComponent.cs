@@ -4,7 +4,7 @@ using System.Text;
 
 namespace RealSuperHot1._0
 {
-    interface IActionComponent
+    interface IInputComponent
     {
         public bool TakeInput(out Direction direction);
     }

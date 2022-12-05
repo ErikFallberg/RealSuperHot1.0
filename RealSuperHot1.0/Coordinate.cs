@@ -17,12 +17,6 @@ namespace RealSuperHot1._0
         public Coordinate(Coordinate other)
             => CopyFrom(other);
 
-        public Coordinate(Coordinate other, Direction direction) : this(other)
-            => IncrementCoordinate(direction);
-            
-        
-
-
         public void CopyFrom(Coordinate other)
         {
             this.x = other.x;
@@ -49,8 +43,7 @@ namespace RealSuperHot1._0
                     x++;
                     break;
                 default:
-                    // all inputs that arent valid dont do anyttihng. 
-                    break;
+                    throw new Exception("The direction is not valid in IncrementCoordinate");
             }
         }
 

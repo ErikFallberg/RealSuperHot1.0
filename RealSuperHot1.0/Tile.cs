@@ -16,7 +16,7 @@ namespace RealSuperHot1._0
             this.Coord = coord;
         }
 
-        abstract public void Attacked(Direction direction); // Bool attacked? 
+        abstract public void Attacked(Direction direction);
 
         public void ResetId()
         {

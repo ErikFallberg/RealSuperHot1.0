@@ -2,15 +2,8 @@
 using System.Collections.Generic;
 
 namespace RealSuperHot1._0
+#nullable enable
 {
-        //  Improvements :
-        //  Välja hp, eller difficulty. 
-        //  Välja karaktärsbild. 
-        //  Potentiell förbättring, inte resetta alla tiles. 
-        // tilesförändring tar in ett ID? 
-        // World 
-        // Krav : Throw and catch; 
-        // Enable nullable, och nullhantering // findtile gets a try-catch. 
     enum Direction
     {
         Left = ConsoleKey.A,
@@ -29,21 +22,15 @@ namespace RealSuperHot1._0
         static int playerhp = 20;
         static char playersprite = '@';
 
-        static Actor player;
+        static Actor player = new Actor(new PlayerInput(), new Coordinate(startingpos, startingpos), playerhp, playersprite);
 
-        static List<Actor> allActors;
+        static List<Actor> allActors = new List<Actor> { player };
 
-        static World world;
-
-
+        static World world = new World(map, allActors);
 
 
         static void Main()
         {
-            player = new Actor(new PlayerComponent(), new Coordinate(startingpos, startingpos), playerhp, playersprite);
-            allActors = new List<Actor> { player };
-            world = new World(map, allActors);
-
             int timer = 0;
             int level = 0;
             score = 0;
@@ -56,9 +43,9 @@ namespace RealSuperHot1._0
                 foreach (Actor actor in allActors)
                 {
                     if (actor.TakeInput(out Direction direction))
-                        Attack(actor);
+                        score += actor.Attack(world);
                     else if(actor.Hp > 0)
-                        Move(actor, direction);
+                        actor.Move(world, direction);
                 }
                 if (player.Hp < 1)
                     break;
@@ -72,35 +59,26 @@ namespace RealSuperHot1._0
             Console.Clear();
             Console.WriteLine("Game Over!!!");
             Console.WriteLine($"Your final score was {score}");
-        }
-        
+            Console.ReadKey();
+            Console.Clear();
 
-        static public void Attack(Actor actor)
-        {
-            Coordinate temp = actor.GetCoordinate();
-
-            if (world.ActorCollision(temp, out Actor target))
+            Console.WriteLine("Do you wanna start again?");
+            Console.WriteLine("Y / N");
+            while (true)
             {
-                target.Hp--;
-                score++;
+                ConsoleKey input = Console.ReadKey().Key;
+                if (input == ConsoleKey.Y)
+                {
+                    player = new Actor(new PlayerInput(), new Coordinate(startingpos, startingpos), playerhp, playersprite);
+                    allActors = new List<Actor> { player };
+                    world = new World(map, allActors);
+                    Console.Clear();
+                    Main();
+                }
+                else if (input == ConsoleKey.N)
+                    break;
             }
-            actor.MakeAttack(world.FindTile(temp));
-            actor.CancelMove(); 
-        }
 
-
-        static public void Move(Actor actor, Direction direction)
-        {
-            if (!actor.CheckDirection(direction))
-                return;
-            else
-            {
-                Coordinate temp = actor.GetCoordinate();
-                if (world.WallCollision(temp) || world.ActorCollision(temp))
-                    actor.CancelMove();
-                else
-                    actor.PerformMove();
-            }
         }
 
         public static void Spawner(int level)
@@ -114,7 +92,7 @@ namespace RealSuperHot1._0
         public static void SpawnMonster()
         {
             Coordinate monstercoord = SpawnLocation();
-            MonsterComponent monstercomp = new MonsterComponent(monstercoord, player.ActorCoordinate);
+            MonsterInput monstercomp = new MonsterInput(monstercoord, player.ActorCoordinate);
             char id = 'X';
             int hp = 1;
 
@@ -123,8 +101,8 @@ namespace RealSuperHot1._0
 
         public static Coordinate SpawnLocation()
         {
-            int x = 0;
-            int y = 0;
+            int x;
+            int y;
             Random rand = new Random();
             int r = rand.Next(0, 4);
             switch (r)
@@ -152,7 +130,7 @@ namespace RealSuperHot1._0
         }
 
 
-        static Tile[] CreateMap(int size) // Temporary mapmaker, could be made different or bigger for other variations.
+        static Tile[] CreateMap(int size) 
         {
             Tile[] temp = new Tile[size * size];
             int index = 0;
